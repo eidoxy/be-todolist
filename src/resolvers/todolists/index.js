@@ -3,7 +3,8 @@ const { check, validationResult } = require('express-validator');
 
 module.exports = {
   createTodoList: async (req, res) => {
-    const { title, description, user_id } = req.body;
+    const { user_id } = req.params;
+    const { title, description } = req.body;
     await check('title').isString().notEmpty().run(req);
     await check('description').isString().notEmpty().run(req);
     const result = validationResult(req);
@@ -26,7 +27,7 @@ module.exports = {
     return res.status(200).json({ data: todolists, message: 'Success get todolist data' });
   },
   updateTodolist: async (req, res) => {
-    const { id, user_id } = req.params;
+    const { id } = req.params;
     const { title, description } = req.body;
     const todolists = await knex('todolists').select('*').where({ id });
     if (!todolists) return res.status(404).json({ message: 'Todolist not found' });
@@ -39,3 +40,4 @@ module.exports = {
     return res.status(200).json({ message: 'Success delete todolist data' });
   },
 };
+
